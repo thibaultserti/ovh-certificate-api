@@ -3,6 +3,7 @@
 import logging
 import os
 import subprocess
+import tempfile
 
 import uvicorn
 
@@ -12,7 +13,6 @@ from constants import (
     CERTBOT_EMAIL,
     CERTBOT_PROPAGATION_SECONDS,
     CERTBOT_STAGING,
-    CERTBOT_WORKDIR,
     DOMAIN_NAME,
     OVH_APPLICATION_KEY,
     OVH_APPLICATION_SECRET,
@@ -54,48 +54,50 @@ def generate_certificate(subdomain: str):
     """
     Generate certificate
     """
-    try:
-        # Commande certbot pour obtenir un certificat SSL
-        command_certbot = f"""certbot certonly \
-        --dns-ovh \
-        --dns-ovh-credentials {OVH_CREDS_PATH} \
-        --non-interactive \
-        --work-dir {CERTBOT_WORKDIR} \
-        --logs-dir {CERTBOT_WORKDIR}/logs \
-        --config-dir {CERTBOT_WORKDIR}/conf \
-        --agree-tos \
-        --email {CERTBOT_EMAIL} \
-        -d {subdomain}.{DOMAIN_NAME} \
-        --dns-ovh-propagation-seconds {str(CERTBOT_PROPAGATION_SECONDS)}
-"""
+    with tempfile.TemporaryDirectory() as tmpdir:
 
-        if CERTBOT_STAGING:
-            command_certbot += " --staging"
+        try:
+            # Commande certbot pour obtenir un certificat SSL
+            command_certbot = f"""certbot certonly \
+            --dns-ovh \
+            --dns-ovh-credentials {OVH_CREDS_PATH} \
+            --non-interactive \
+            --work-dir {tmpdir} \
+            --logs-dir {tmpdir}/logs \
+            --config-dir {tmpdir}/conf \
+            --agree-tos \
+            --email {CERTBOT_EMAIL} \
+            -d {subdomain}.{DOMAIN_NAME} \
+            --dns-ovh-propagation-seconds {CERTBOT_PROPAGATION_SECONDS}
+    """
 
-        # Lancement de la commande en utilisant subprocess
-        subprocess.run(command_certbot, shell=True, check=True)
+            if CERTBOT_STAGING:
+                command_certbot += " --staging"
 
-    except subprocess.CalledProcessError as exception:
-        logging.error(exception)
-        raise HTTPException(status_code=500, detail="Subprocess error") from exception
+            # Lancement de la commande en utilisant subprocess
+            subprocess.run(command_certbot, shell=True, check=True)
 
-    except Exception as exception:
-        logging.error(exception)
-        raise HTTPException(status_code=500, detail="Error") from exception
+        except subprocess.CalledProcessError as exception:
+            logging.error(exception)
+            raise HTTPException(status_code=500, detail="Subprocess error") from exception
 
-    path_fullchain = f"{CERTBOT_WORKDIR}/conf/live/{subdomain}.{DOMAIN_NAME}/fullchain.pem"
-    path_privkey = f"{CERTBOT_WORKDIR}/conf/live/{subdomain}.{DOMAIN_NAME}/privkey.pem"
+        except Exception as exception:
+            logging.error(exception)
+            raise HTTPException(status_code=500, detail="Error") from exception
 
-    with open(path_fullchain, "r", encoding="utf-8") as file:
-        fullchain = file.read()
-    with open(path_privkey, "r", encoding="utf-8") as file:
-        privkey = file.read()
+        path_fullchain = f"{tmpdir}/conf/live/{subdomain}.{DOMAIN_NAME}/fullchain.pem"
+        path_privkey = f"{tmpdir}/conf/live/{subdomain}.{DOMAIN_NAME}/privkey.pem"
 
-    return {
-        "message": f"Certificate for {subdomain}.{DOMAIN_NAME} generated successfully",
-        "privkey": {privkey},
-        "fullchain": {fullchain},
-    }
+        with open(path_fullchain, "r", encoding="utf-8") as file:
+            fullchain = file.read()
+        with open(path_privkey, "r", encoding="utf-8") as file:
+            privkey = file.read()
+
+        return {
+            "message": f"Certificate for {subdomain}.{DOMAIN_NAME} generated successfully",
+            "privkey": {privkey},
+            "fullchain": {fullchain},
+        }
 
 
 if __name__ == "__main__":
