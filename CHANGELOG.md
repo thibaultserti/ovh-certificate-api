@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/thibaultserti/ovh-certificate-api/compare/v1.0.2...v1.0.3) (2024-01-26)
+
+
+### Bug Fixes
+
+* certbot workdir ([3646285](https://github.com/thibaultserti/ovh-certificate-api/commit/3646285d562faa303067f496c8ba0dd0e38c7527))
+
 ## [1.0.2](https://github.com/thibaultserti/ovh-certificate-api/compare/v1.0.1...v1.0.2) (2024-01-26)
 
 
