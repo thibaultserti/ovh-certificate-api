@@ -56,6 +56,8 @@ def generate_certificate(subdomain: str):
     """
     with tempfile.TemporaryDirectory() as tmpdir:
 
+        os.symlink("/etc/letsencrypt/accounts/", f"{tmpdir}/accounts", target_is_directory=True)
+
         try:
             # Commande certbot pour obtenir un certificat SSL
             command_certbot = f"""certbot certonly \
@@ -64,7 +66,7 @@ def generate_certificate(subdomain: str):
             --non-interactive \
             --work-dir {tmpdir} \
             --logs-dir {tmpdir}/logs \
-            --config-dir {tmpdir}/conf \
+            --config-dir {tmpdir} \
             --agree-tos \
             --email {CERTBOT_EMAIL} \
             -d {subdomain}.{DOMAIN_NAME} \
@@ -84,8 +86,8 @@ def generate_certificate(subdomain: str):
             logging.error(exception)
             raise HTTPException(status_code=500, detail="Error") from exception
 
-        path_fullchain = f"{tmpdir}/conf/live/{subdomain}.{DOMAIN_NAME}/fullchain.pem"
-        path_privkey = f"{tmpdir}/conf/live/{subdomain}.{DOMAIN_NAME}/privkey.pem"
+        path_fullchain = f"{tmpdir}/live/{subdomain}.{DOMAIN_NAME}/fullchain.pem"
+        path_privkey = f"{tmpdir}/live/{subdomain}.{DOMAIN_NAME}/privkey.pem"
 
         with open(path_fullchain, "r", encoding="utf-8") as file:
             fullchain = file.read()
