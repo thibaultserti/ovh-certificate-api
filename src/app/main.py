@@ -44,13 +44,13 @@ app = FastAPI()
 
 
 @app.get("/", include_in_schema=False)
-async def health_check():
+def health_check():
     """Healthcheck."""
     return JSONResponse(content={"status": "OK"})
 
 
 @app.get("/generate_certificate/{subdomain}")
-async def generate_certificate(subdomain: str):
+def generate_certificate(subdomain: str):
     """
     Generate certificate
     """
@@ -99,4 +99,4 @@ async def generate_certificate(subdomain: str):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host=APP_HOST, port=APP_PORT, workers=UVICORN_WORKER)
+    uvicorn.run(app, host=APP_HOST, port=APP_PORT, workers=int(UVICORN_WORKER))
