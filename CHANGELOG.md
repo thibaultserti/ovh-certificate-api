@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/thibaultserti/ovh-certificate-api/compare/v1.0.3...v1.0.4) (2024-01-26)
+
+
+### Bug Fixes
+
+* fix staging flag ([e3498a8](https://github.com/thibaultserti/ovh-certificate-api/commit/e3498a89634c6f46c09c10fe0418f747eb47c97b))
+
 ## [1.0.3](https://github.com/thibaultserti/ovh-certificate-api/compare/v1.0.2...v1.0.3) (2024-01-26)
 
 
