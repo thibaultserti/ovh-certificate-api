@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/thibaultserti/ovh-certificate-api/compare/v1.0.4...v1.1.0) (2024-01-26)
+
+
+### Features
+
+* add link to global acme account ([96a7db1](https://github.com/thibaultserti/ovh-certificate-api/commit/96a7db15793bacefc5feb4e13a265509cff3e2a2))
+
 ## [1.0.4](https://github.com/thibaultserti/ovh-certificate-api/compare/v1.0.3...v1.0.4) (2024-01-26)
 
 
