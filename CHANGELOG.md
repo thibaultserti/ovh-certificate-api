@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/thibaultserti/ovh-certificate-api/compare/v1.0.1...v1.0.2) (2024-01-26)
+
+
+### Bug Fixes
+
+* remove async on endpoints ([e51c1e2](https://github.com/thibaultserti/ovh-certificate-api/commit/e51c1e23cd44bd795957439fc7a64e21ebab29fd))
+
 ## [1.0.1](https://github.com/thibaultserti/ovh-certificate-api/compare/v1.0.0...v1.0.1) (2024-01-26)
 
 
