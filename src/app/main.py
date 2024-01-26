@@ -18,6 +18,7 @@ from constants import (
     OVH_APPLICATION_SECRET,
     OVH_CONSUMER_KEY,
     OVH_CREDS_PATH,
+    UVICORN_WORKER
 )
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
@@ -98,4 +99,4 @@ async def generate_certificate(subdomain: str):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host=APP_HOST, port=APP_PORT)
+    uvicorn.run(app, host=APP_HOST, port=APP_PORT, workers=UVICORN_WORKER)

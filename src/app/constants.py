@@ -19,3 +19,5 @@ CERTBOT_STAGING = os.getenv("CERTBOT_STAGING", "False").lower() == "true"
 CERTBOT_EMAIL = os.getenv("CERTBOT_EMAIL", f"admin@{DOMAIN_NAME}")
 CERTBOT_PROPAGATION_SECONDS = os.getenv("CERTBOT_PROPAGATION_SECONDS", "15")
 CERTBOT_WORKDIR = "/tmp/letsencrypt"
+
+UVICORN_WORKER = os.getenv("UVICORN_WORKER", "1")
