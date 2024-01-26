@@ -68,8 +68,7 @@ def generate_certificate(subdomain: str):
             --agree-tos \
             --email {CERTBOT_EMAIL} \
             -d {subdomain}.{DOMAIN_NAME} \
-            --dns-ovh-propagation-seconds {CERTBOT_PROPAGATION_SECONDS}
-    """
+            --dns-ovh-propagation-seconds {CERTBOT_PROPAGATION_SECONDS}"""
 
             if CERTBOT_STAGING:
                 command_certbot += " --staging"
